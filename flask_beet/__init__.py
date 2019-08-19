@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from pprint import pprint
 from flask import current_app, _app_ctx_stack, session
 from sqlalchemy import Column, String
@@ -14,6 +15,7 @@ _user = LocalProxy(lambda: _datastore.user_model)
 
 #: Default configuration
 _default_config = {
+    "APP_NAME": "Flask-Beet",
     "LOGIN_ENDOINT": "/login/beet",
     "ONBOARDING_VIEW": "/register",
     "INVALID_PAYLOAD_MESSAGE": "Invalid payload!",

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 from flask import (
     Blueprint,
@@ -10,7 +11,7 @@ from flask import (
     render_template,
     send_file,
 )
-from flask_security import url_for_security, login_user
+from flask_security import login_user
 from werkzeug.local import LocalProxy
 
 from . import forms, signals
@@ -61,12 +62,20 @@ def login():
             )
             return redirect(app.config.get("BEET_ONBOARDING_VIEW"))
 
-    return render_template(app.config.get("BEET_LOGIN_TEMPLATE"), **locals())
+    return render_template(app.config.get("BEET_LOGIN_TEMPLATE"), **locals(), app=app)
 
 
 @bp.route("/img/beet.png")
 def beet_logo():
     """ Return the BEET logo
     """
-    path = os.path.join(os.path.dirname(__file__), "img", "beet.png")
+    path = os.path.join(os.path.dirname(__file__), "static", "img", "beet.png")
+    return send_file(path)
+
+
+@bp.route("/js/beet.js")
+def beet_js():
+    """ Return the BEET logo
+    """
+    path = os.path.join(os.path.dirname(__file__), "static", "js", "beet-js.js")
     return send_file(path)
