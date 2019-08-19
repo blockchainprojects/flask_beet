@@ -5,6 +5,17 @@ from bitshares.message import Message
 
 
 class ValidSignedMessage:
+    """ This Validator is used to check the signed message
+
+        It will return (unless exception is raised) an object that has
+        additional attributes:
+
+            * field.signed_by_account
+            * field.signed_by_name
+            * field.plain_message
+
+    """
+
     def __init__(self, message="Message invalid!"):
         self.message = message
 
@@ -22,6 +33,9 @@ class ValidSignedMessage:
 
 
 class SignedMessageLoginForm(FlaskForm):
+    """ The login form only requires a TextArea and a submit button
+    """
+
     message = TextAreaField(
         "Signed Message", [DataRequired(), ValidSignedMessage()], id="signedMessage"
     )

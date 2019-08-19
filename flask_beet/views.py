@@ -15,7 +15,7 @@ from werkzeug.local import LocalProxy
 
 from . import forms, signals
 
-bp = Blueprint("beet", __name__, template_folder="templates")
+bp = Blueprint("beet", __name__, template_folder="templates", url_prefix="/beet")
 
 # Convenient references
 _security = LocalProxy(lambda: app.extensions["security"])
@@ -24,12 +24,11 @@ _db = LocalProxy(lambda: _datastore.db)
 _user = LocalProxy(lambda: _datastore.user_model)
 
 
-def _user_loader(account_name):
-    return _security.datastore.find_user(account_name=account_name)
-
-
-@bp.route("/login/beet/", methods=["POST", "GET"])
+@bp.route("/login", methods=["POST", "GET"])
 def login():
+    """ This is the main endpoint. It presents a login
+        form from /beet/login.html and deals with loggin in a user
+    """
     loginForm = forms.SignedMessageLoginForm()
     if request.method == "POST" and loginForm.validate_on_submit():
         if (
@@ -42,7 +41,7 @@ def login():
         account_name = loginForm.message.signedMessage.signed_by_name
         user = _user.find_beet_account_name(account_name)
         if user:
-            login_user(user, remember=True)
+            login_user(user, remember=app.config.get("BEET_REMEMBER"))
             signals.beet_logged_in.send(
                 app._get_current_object(), user=user, message=loginForm.message.data
             )
@@ -62,10 +61,12 @@ def login():
             )
             return redirect(app.config.get("BEET_ONBOARDING_VIEW"))
 
-    return render_template("beet/login.html", **locals())
+    return render_template(app.config.get("BEET_LOGIN_TEMPLATE"), **locals())
 
 
-@bp.route("/login/beet/img/beet.png")
+@bp.route("/img/beet.png")
 def beet_logo():
+    """ Return the BEET logo
+    """
     path = os.path.join(os.path.dirname(__file__), "img", "beet.png")
     return send_file(path)
