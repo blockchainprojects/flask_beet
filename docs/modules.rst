@@ -5,3 +5,4 @@ flask_beet
    :maxdepth: 6
 
    flask_beet
+   tests
