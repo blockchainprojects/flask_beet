@@ -20,3 +20,6 @@ coverage
 mock
 flask-testing
 flask-sqlalchemy
+
+# template
+Flask-Sphinx-Themes
