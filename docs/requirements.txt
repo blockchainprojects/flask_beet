@@ -1,3 +1,19 @@
+bitshares
+
+# Flask
+Flask
+Flask-Login
+Flask-Security
+Flask-Session
+
+# Tooling
+SQLAlchemy
+WTForms
+Werkzeug
+uuid
+blinker
+
+# tests
 pytest
 pytest-mock
 coverage
