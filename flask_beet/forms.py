@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, TextAreaField
 from wtforms.validators import DataRequired, ValidationError
@@ -25,7 +26,7 @@ class ValidSignedMessage:
             ret = field.signedMessage.verify()
         except Exception as e:
             raise ValidationError(str(e))
-        if not ret:
+        if not ret:  # pragma: no cover
             raise ValidationError(self.message)
         field.signed_by_account = field.signedMessage.signed_by_account
         field.signed_by_name = field.signedMessage.signed_by_name
