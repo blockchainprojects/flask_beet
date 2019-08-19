@@ -1,6 +1,7 @@
 # Flask-Beet Extension
 
 [![build status](https://secure.travis-ci.org/blockchainprojects/flask_beet.png?branch=master)](https://travis-ci.org/#!/blockchainprojects/flask_beet)
+[![codecov](https://codecov.io/gh/blockchainprojects/flask_beet/branch/master/graph/badge.svg)](https://codecov.io/gh/blockchainprojects/flask_beet)
 
 Flask-beet is a Flask extension for allow login (flask-security/flask-login)
 via signed messages and the [Beet app](http://get-beet.io).
