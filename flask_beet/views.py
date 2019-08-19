@@ -32,11 +32,12 @@ def login():
     """
     loginForm = forms.SignedMessageLoginForm()
     if request.method == "POST" and loginForm.validate_on_submit():
-        if (
-            loginForm.message.signedMessage.plain_message
-            != session[app.config.get("BEET_UNIQUE_MESSAGE_SESSION_KEY")]
+        if loginForm.message.signedMessage.plain_message != session.get(
+            app.config.get("BEET_UNIQUE_MESSAGE_SESSION_KEY")
         ):
-            flash(app.config.get("BEET_INVALID_PAYLOAD_MESSAGE"), "error")
+            flash(
+                app.config.get("BEET_INVALID_PAYLOAD_MESSAGE", "ERRORORORORO"), "error"
+            )
             return redirect(url_for(".login"))
 
         account_name = loginForm.message.signedMessage.signed_by_name
@@ -47,7 +48,7 @@ def login():
                 app._get_current_object(), user=user, message=loginForm.message.data
             )
             return redirect(
-                request.args.get("next") or app.config.get("SECURITY_POST_LOGIN_VIEW")
+                request.args.get("next") or app.config.get("BEET_POST_LOGIN_VIEW")
             )
         else:
             session[
@@ -55,7 +56,7 @@ def login():
             ] = loginForm.message.data
             session[app.config.get("BEET_ONBOARDING_ACCOUNT_NAME_KEY")] = account_name
             session["_next"] = request.args.get("next") or app.config.get(
-                "SECURITY_POST_LOGIN_VIEW"
+                "BEET_POST_LOGIN_VIEW"
             )
             signals.beet_onboarding.send(
                 app._get_current_object(), user=user, message=loginForm.message.data

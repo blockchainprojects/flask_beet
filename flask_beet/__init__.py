@@ -17,6 +17,7 @@ _user = LocalProxy(lambda: _datastore.user_model)
 _default_config = {
     "APP_NAME": "Flask-Beet",
     "LOGIN_ENDOINT": "/login/beet",
+    "POST_LOGIN_VIEW": "/",
     "ONBOARDING_VIEW": "/register",
     "INVALID_PAYLOAD_MESSAGE": "Invalid payload!",
     "UNIQUE_MESSAGE_GENERATOR": unique_request_id,
