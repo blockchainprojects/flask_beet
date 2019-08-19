@@ -21,7 +21,6 @@ bp = Blueprint("beet", __name__, template_folder="templates", url_prefix="/beet"
 # Convenient references
 _security = LocalProxy(lambda: app.extensions["security"])
 _datastore = LocalProxy(lambda: _security.datastore)
-_db = LocalProxy(lambda: _datastore.db)
 _user = LocalProxy(lambda: _datastore.user_model)
 
 

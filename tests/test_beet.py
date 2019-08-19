@@ -73,7 +73,7 @@ timestamp=2019-08-19T11:02:18
 1f2104580464
 -----END BITSHARES SIGNED MESSAGE-----"""
 
-_invalid_payload_signed_message = """-----BEGIN BITSHARES SIGNED MESSAGE-----
+_invalid_signature_signed_message = """-----BEGIN BITSHARES SIGNED MESSAGE-----
 abcsfasFasfasf
 -----BEGIN META-----
 account=xeroc
@@ -82,6 +82,17 @@ block=40213027
 timestamp=2019-08-19T11:02:18
 -----BEGIN SIGNATURE-----
 1f210458337f3cf13b80c46ae04b5cfe8ee2ff094bc559fbb663a5cd345015cfec24b3dafc111fbdb7099c347885eb96e8453d3fb2b72e23e3e9e446fb61540464
+-----END BITSHARES SIGNED MESSAGE-----"""
+
+_invalid_payload_signed_message = """-----BEGIN BITSHARES SIGNED MESSAGE-----
+sfasfasas
+-----BEGIN META-----
+account=xeroc
+memokey=BTS5TPTziKkLexhVKsQKtSpo4bAv5RnB8oXcG4sMHEwCcTf3r7dqE
+block=40215253
+timestamp=2019-08-19T12:53:45
+-----BEGIN SIGNATURE-----
+2033d1e0b276941849a3575bcd0d802b9befeb6177065dbbe0a6e11872e84e31e42e2e3357691744cdbace60b3336b89f1bb38c45f335c0ea08673b2e92288c6a9
 -----END BITSHARES SIGNED MESSAGE-----"""
 
 
@@ -107,6 +118,9 @@ class TestCases(TestCase):
         user.set_beet_account_name("xeroc")
         db.session.add(user)
         db.session.commit()
+        db.session.refresh(user)
+
+        self.assertEqual(user.get_beet_account_name(), "xeroc")
 
     def test_form(self):
         rep = self.client.get("/beet/login")
@@ -145,15 +159,26 @@ class TestCases(TestCase):
         self.assertEqual(rep.status_code, 200)
         self.assertIn(b"No Decoder accepted the message", rep.data)
 
+    def test_login_invalidsig(self):
+        self.setup_user()
+        rep = self.client.get("/beet/login")
+        rep = self.client.post(
+            "/beet/login",
+            data=dict(message=_invalid_signature_signed_message, submit="Login"),
+        )
+        self.assertEqual(rep.status_code, 200)
+        self.assertIn(b"The signature doesn&#39;t match the memo key", rep.data)
+
     def test_login_invalidpayload(self):
         self.setup_user()
         rep = self.client.get("/beet/login")
         rep = self.client.post(
             "/beet/login",
             data=dict(message=_invalid_payload_signed_message, submit="Login"),
+            follow_redirects=True,
         )
         self.assertEqual(rep.status_code, 200)
-        self.assertIn(b"The signature doesn&#39;t match the memo key", rep.data)
+        self.assertIn(b"Invalid payload!", rep.data)
 
     def test_image(self):
         rep = self.client.get("/beet/img/beet.png")

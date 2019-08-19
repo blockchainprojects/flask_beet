@@ -6,12 +6,6 @@ from werkzeug.local import LocalProxy
 from .utils import unique_request_id
 from .views import bp
 
-# Convenient references
-_security = LocalProxy(lambda: current_app.extensions["security"])
-_datastore = LocalProxy(lambda: _security.datastore)
-_db = LocalProxy(lambda: _datastore.db)
-_user = LocalProxy(lambda: _datastore.user_model)
-
 
 #: Default configuration
 _default_config = {
@@ -31,7 +25,7 @@ _default_config = {
 
 class Beet(object):
     def __init__(self, app=None):
-        if app is not None:
+        if app is not None:  # pragma: no cover
             self.init_app(app)
 
     def init_app(self, app):
