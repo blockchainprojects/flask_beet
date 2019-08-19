@@ -15,7 +15,14 @@ _user = LocalProxy(lambda: _datastore.user_model)
 
 
 #: Default configuration
-_default_config = {"ONBOARDING_VIEW": "/register"}
+_default_config = {
+    "ONBOARDING_VIEW": "/register",
+    "INVALID_PAYLOAD_MESSAGE": "Invalid payload!",
+    "UNIQUE_MESSAGE_GENERATOR": unique_request_id,
+    "UNIQUE_MESSAGE_SESSION_KEY": "_signed_message_payload",
+    "ONBOARDING_ACCOUNT_NAME_KEY": "_onboarding_account_name",
+    "ONBOARDING_MESSAGE_KEY": "_onboarding_message",
+}
 
 
 class Beet(object):
@@ -32,23 +39,16 @@ class Beet(object):
 
         @app.context_processor
         def template_extras():
-            signed_message_payload = unique_request_id()
-            session["_signed_message_payload"] = signed_message_payload
+            """ This context processor will throw a random string, store it in
+                the session and provide it to the template
+            """
+            signed_message_payload = app.config.get("BEET_UNIQUE_MESSAGE_GENERATOR")()
+            session[
+                app.config.get("BEET_UNIQUE_MESSAGE_SESSION_KEY")
+            ] = signed_message_payload
             return dict(signed_message_payload=signed_message_payload)
 
         return app
-
-    @property
-    def security(self):
-        return self.app.extensions.get("security")
-
-    @property
-    def connection(self):
-        ctx = _app_ctx_stack.top
-        if ctx is not None:
-            if not hasattr(ctx, "sqlite3_db"):
-                ctx.sqlite3_db = self.connect()
-            return ctx.sqlite3_db
 
 
 class BeetMixin:
