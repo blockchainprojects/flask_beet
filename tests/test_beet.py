@@ -105,6 +105,7 @@ class TestCases(TestCase):
         app.config["SECRET_KEY"] = "foobar"
         app.config["BEET_UNIQUE_MESSAGE_GENERATOR"] = lambda: "abcdefg"
         app.config["WTF_CSRF_ENABLED"] = False
+        app.config["SECURITY_CONFIRMABLE"] = True
         self.beet = Beet(app)
         self.db = db.init_app(app)
         self.security = Security(app, SQLAlchemyUserDatastore(db, User, Role))
@@ -114,13 +115,13 @@ class TestCases(TestCase):
         db.create_all()
 
     def setup_user(self):
-        user = User(active=1, confirmed_at=datetime.utcnow())
-        user.set_beet_account_name("xeroc")
-        db.session.add(user)
+        self.user = User(active=1, confirmed_at=datetime.utcnow())
+        self.user.set_beet_account_name("xeroc")
+        db.session.add(self.user)
         db.session.commit()
-        db.session.refresh(user)
+        db.session.refresh(self.user)
 
-        self.assertEqual(user.get_beet_account_name(), "xeroc")
+        self.assertEqual(self.user.get_beet_account_name(), "xeroc")
 
     def test_form(self):
         rep = self.client.get("/beet/login")
@@ -179,6 +180,27 @@ class TestCases(TestCase):
         )
         self.assertEqual(rep.status_code, 200)
         self.assertIn(b"Invalid payload!", rep.data)
+
+    def test_login_unconfirmed_user(self):
+        self.setup_user()
+        self.user.confirmed_at = None
+        db.session.commit()
+        rep = self.client.get("/beet/login")
+        rep = self.client.post(
+            "/beet/login", data=dict(message=_signed_message, submit="Login")
+        )
+        self.assertEqual(rep.status_code, 200)
+        self.assertIn(b"Email requires confirmation.", rep.data)
+
+    def test_login_inactive_user(self):
+        self.setup_user()
+        self.user.active = False
+        rep = self.client.get("/beet/login")
+        rep = self.client.post(
+            "/beet/login", data=dict(message=_signed_message, submit="Login")
+        )
+        self.assertEqual(rep.status_code, 200)
+        self.assertIn(b"Account is disabled.", rep.data)
 
     def test_image(self):
         rep = self.client.get("/beet/img/beet.png")

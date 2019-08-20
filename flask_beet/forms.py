@@ -1,8 +1,17 @@
 # -*- coding: utf-8 -*-
+from flask import current_app as app
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, TextAreaField
 from wtforms.validators import DataRequired, ValidationError
 from bitshares.message import Message
+from flask_security.confirmable import requires_confirmation
+from flask_security.utils import get_message
+from werkzeug.local import LocalProxy
+
+# Convenient references
+_security = LocalProxy(lambda: app.extensions["security"])
+_datastore = LocalProxy(lambda: _security.datastore)
+_user = LocalProxy(lambda: _datastore.user_model)
 
 
 class ValidSignedMessage:
@@ -41,3 +50,15 @@ class SignedMessageLoginForm(FlaskForm):
         "Signed Message", [DataRequired(), ValidSignedMessage()], id="signedMessage"
     )
     submit = SubmitField("Login")
+
+    def validate(self):
+        if not super(SignedMessageLoginForm, self).validate():
+            return False
+        self.user = _user.find_beet_account_name(self.message.signed_by_name)
+        if self.user and requires_confirmation(self.user):
+            self.message.errors.append(get_message("CONFIRMATION_REQUIRED")[0])
+            return False
+        if self.user and not self.user.is_active:
+            self.message.errors.append(get_message("DISABLED_ACCOUNT")[0])
+            return False
+        return True
