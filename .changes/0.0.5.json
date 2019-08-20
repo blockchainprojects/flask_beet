@@ -1,0 +1,6 @@
+[
+  {
+    "description": "Ensure we use the proper blueprint in our templates",
+    "type": "patch"
+  }
+]
