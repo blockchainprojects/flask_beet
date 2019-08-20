@@ -1,0 +1,6 @@
+[
+  {
+    "description": "Improve Makefile to work with semver",
+    "type": "patch"
+  }
+]
