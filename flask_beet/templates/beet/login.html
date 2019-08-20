@@ -1,4 +1,5 @@
-{% extends "layout.html" %}
+{% set layout = config.get('BEET_LAYOUT_TEMPLATE') %}
+{% extends layout %}
 
 {% block content %}
 {% include "_messages.html" %}

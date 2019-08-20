@@ -28,9 +28,7 @@ def login():
         if beet_login_form.message.signedMessage.plain_message != session.get(
             app.config.get("BEET_UNIQUE_MESSAGE_SESSION_KEY")
         ):
-            flash(
-                app.config.get("BEET_INVALID_PAYLOAD_MESSAGE", "ERRORORORORO"), "error"
-            )
+            flash(app.config.get("BEET_INVALID_PAYLOAD_MESSAGE"), "error")
             return redirect(url_for(".login"))
 
         account_name = beet_login_form.message.signedMessage.signed_by_name
