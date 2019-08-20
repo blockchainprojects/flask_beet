@@ -1,0 +1,18 @@
+[
+  {
+    "description": "Make it easier to use the form alone",
+    "type": "minor"
+  },
+  {
+    "description": "Ensure we support security confirmables",
+    "type": "minor"
+  },
+  {
+    "description": "Use pytest in Makefile",
+    "type": "patch"
+  },
+  {
+    "description": "Cleanup and ensure we can use this with MySql/MariaDB",
+    "type": "minor"
+  }
+]

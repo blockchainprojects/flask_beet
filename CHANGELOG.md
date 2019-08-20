@@ -1,6 +1,13 @@
 # Changelog
 Note: version releases in the 0.x.y range may introduce breaking changes.
 
+## 0.1.0
+
+- minor: Cleanup and ensure we can use this with MySql/MariaDB
+- minor: Ensure we support security confirmables
+- minor: Make it easier to use the form alone
+- patch: Use pytest in Makefile
+
 ## 0.0.5
 
 - patch: Ensure we use the proper blueprint in our templates
