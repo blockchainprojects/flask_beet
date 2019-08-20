@@ -1,0 +1,6 @@
+[
+  {
+    "description": "Ensure the MANIFEST contains the templates, scripts and styles",
+    "type": "patch"
+  }
+]

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup
 
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 setup(
     name="Flask-Beet",
