@@ -1,0 +1,6 @@
+[
+  {
+    "description": "Update README.md and Makefile to reflect the use of semversioner",
+    "type": "patch"
+  }
+]

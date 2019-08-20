@@ -49,5 +49,10 @@ prepare: clean test docs authors
 semver:
 	semversioner release
 	semversioner changelog > CHANGELOG.md
+	CURRENT_VERSION=$(semversioner current-version)
+	sed -i "s/^__version__.*/__version__ = \"${CURRENT_VERSION}\"/" setup.py
+	git commit -am "semverioner release updates"
+	git flow release start ${CURRENT_VERSION}
+	git flow release finish
 
 release: semver clean check dist git
