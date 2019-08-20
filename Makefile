@@ -18,7 +18,7 @@ lint:
 	black flask_beet
 
 test:
-	python3 setup.py test
+	pytest
 
 build:
 	python3 setup.py build
