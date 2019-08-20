@@ -12,16 +12,10 @@ from flask import (
     send_file,
 )
 from flask_security import login_user
-from werkzeug.local import LocalProxy
 
 from . import forms, signals
 
 bp = Blueprint("beet", __name__, template_folder="templates", url_prefix="/beet")
-
-# Convenient references
-_security = LocalProxy(lambda: app.extensions["security"])
-_datastore = LocalProxy(lambda: _security.datastore)
-_user = LocalProxy(lambda: _datastore.user_model)
 
 
 @bp.route("/login", methods=["POST", "GET"])
@@ -40,7 +34,7 @@ def login():
             return redirect(url_for(".login"))
 
         account_name = beet_login_form.message.signedMessage.signed_by_name
-        user = _user.find_beet_account_name(account_name)
+        user = beet_login_form.user
         if user:
             login_user(user, remember=app.config.get("BEET_REMEMBER"))
             signals.beet_logged_in.send(
