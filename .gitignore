@@ -80,3 +80,5 @@ config.yaml
 TODO.md
 *.sql
 /src/
+
+.changes/next-release

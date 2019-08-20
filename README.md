@@ -17,14 +17,36 @@ Install the extension with one of the following commands:
 
 ## Usage
 
-Using SeaSurf is fairly straightforward. Begin by importing the extension and
+Using Flask-Beet is fairly straightforward. Begin by importing the extension and
 then passing your application object back to the extension, like this:
 
-    from flask import Flask
-    from flask_beet import Beet
-    app = Flask(__name__)
-    beet = Beet(app)
+```python
+from flask import Flask
+from flask_beet import Beet
+app = Flask(__name__)
+beet = Beet(app)
+```
+You'll also need to extend your user model with the `BeetMixin` mixin:
+
+```python
+from flask_beet import BeetMixin
+
+# Replace
+-class User(db.Model, UserMixin):
+
+# with
++class User(db.Model, UserMixin, BeetMixin):
+```
 
 ## Documentation
 
 The Sphinx-compiled documentation is available here: [flask-beet.rtfd.io](http://flask-beet.rtfd.io/)
+
+## Development
+
+This tool uses `semversioner` to track changes. After changes, please
+use
+
+    semversioner add-change --type patch --description "Fix security vulnerability with authentication."
+
+to track them.
