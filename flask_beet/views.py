@@ -29,9 +29,9 @@ def login():
     """ This is the main endpoint. It presents a login
         form from /beet/login.html and deals with loggin in a user
     """
-    loginForm = forms.SignedMessageLoginForm()
-    if request.method == "POST" and loginForm.validate_on_submit():
-        if loginForm.message.signedMessage.plain_message != session.get(
+    beet_login_form = forms.SignedMessageLoginForm()
+    if request.method == "POST" and beet_login_form.validate_on_submit():
+        if beet_login_form.message.signedMessage.plain_message != session.get(
             app.config.get("BEET_UNIQUE_MESSAGE_SESSION_KEY")
         ):
             flash(
@@ -39,12 +39,14 @@ def login():
             )
             return redirect(url_for(".login"))
 
-        account_name = loginForm.message.signedMessage.signed_by_name
+        account_name = beet_login_form.message.signedMessage.signed_by_name
         user = _user.find_beet_account_name(account_name)
         if user:
             login_user(user, remember=app.config.get("BEET_REMEMBER"))
             signals.beet_logged_in.send(
-                app._get_current_object(), user=user, message=loginForm.message.data
+                app._get_current_object(),
+                user=user,
+                message=beet_login_form.message.data,
             )
             return redirect(
                 request.args.get("next") or app.config.get("BEET_POST_LOGIN_VIEW")
@@ -52,13 +54,15 @@ def login():
         else:
             session[
                 app.config.get("BEET_ONBOARDING_MESSAGE_KEY")
-            ] = loginForm.message.data
+            ] = beet_login_form.message.data
             session[app.config.get("BEET_ONBOARDING_ACCOUNT_NAME_KEY")] = account_name
             session["_next"] = request.args.get("next") or app.config.get(
                 "BEET_POST_LOGIN_VIEW"
             )
             signals.beet_onboarding.send(
-                app._get_current_object(), user=user, message=loginForm.message.data
+                app._get_current_object(),
+                user=user,
+                message=beet_login_form.message.data,
             )
             return redirect(app.config.get("BEET_ONBOARDING_VIEW"))
 

@@ -5,6 +5,7 @@ from sqlalchemy import Column, String
 from werkzeug.local import LocalProxy
 from .utils import unique_request_id
 from .views import bp
+from .forms import SignedMessageLoginForm
 
 
 #: Default configuration
@@ -48,7 +49,11 @@ class Beet(object):
             session[
                 app.config.get("BEET_UNIQUE_MESSAGE_SESSION_KEY")
             ] = signed_message_payload
-            return dict(signed_message_payload=signed_message_payload)
+            beet_login_form = SignedMessageLoginForm()
+            return dict(
+                signed_message_payload=signed_message_payload,
+                beet_login_form=beet_login_form,
+            )
 
         return app
 
