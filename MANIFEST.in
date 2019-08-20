@@ -1,2 +1,4 @@
 include *.md
 include requirements*.txt
+recursive-include flask_beet/templates *
+recursive-include flask_beet/static *
