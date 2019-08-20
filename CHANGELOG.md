@@ -1,6 +1,10 @@
 # Changelog
 Note: version releases in the 0.x.y range may introduce breaking changes.
 
+## 0.0.5
+
+- patch: Ensure we use the proper blueprint in our templates
+
 ## 0.0.4
 
 - patch: Ensure the MANIFEST contains the templates, scripts and styles
