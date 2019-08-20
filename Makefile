@@ -34,11 +34,13 @@ git:
 	git push --tags
 
 check:
-	python3 setup.py check
+	twine check dist/*
 
 dist:
 	python3 setup.py sdist bdist_wheel
 	python3 setup.py bdist_wheel
+
+upload:
 	twine upload --repository-url https://upload.pypi.org/legacy/ dist/*
 
 docs:
@@ -56,4 +58,4 @@ semver:
 	git flow release start $(CURRENT_VERSION)
 	git flow release finish $(CURRENT_VERSION)
 
-release: semver clean check dist git
+release: semver clean dist check upload git

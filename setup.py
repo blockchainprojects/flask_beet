@@ -12,6 +12,7 @@ setup(
     author_email="fabian@chainsquad.com",
     description="A flask extension that allows login via Beet app",
     long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
     packages=["flask_beet"],
     zip_safe=False,
     include_package_data=True,
