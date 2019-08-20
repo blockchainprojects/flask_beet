@@ -41,3 +41,12 @@ from flask_beet import BeetMixin
 ## Documentation
 
 The Sphinx-compiled documentation is available here: [flask-beet.rtfd.io](http://flask-beet.rtfd.io/)
+
+## Development
+
+This tool uses `semversioner` to track changes. After changes, please
+use
+
+    semversioner add-change --type patch --description "Fix security vulnerability with authentication."
+
+to track them.

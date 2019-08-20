@@ -46,4 +46,8 @@ docs:
 
 prepare: clean test docs authors
 
-release: clean check dist git
+semver:
+	semversioner release
+	semversioner changelog > CHANGELOG.md
+
+release: semver clean check dist git
