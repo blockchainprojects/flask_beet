@@ -1,4 +1,5 @@
 .PHONY: clean-pyc clean-build docs
+CURRENT_VERSION := $(shell semversioner current-version)
 
 clean: clean-build clean-pyc
 
@@ -49,5 +50,10 @@ prepare: clean test docs authors
 semver:
 	semversioner release
 	semversioner changelog > CHANGELOG.md
+	sed -i "s/^__version__.*/__version__ = \"$(CURRENT_VERSION)\"/" setup.py
+	git add .changes setup.py CHANGELOG.md
+	git commit -m "semverioner release updates" --no-verify
+	git flow release start $(CURRENT_VERSION)
+	git flow release finish $(CURRENT_VERSION)
 
 release: semver clean check dist git
