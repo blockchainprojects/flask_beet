@@ -1,4 +1,4 @@
-<script type="text/javascript" src="{{url_for('.beet_js')}}"></script>
+<script type="text/javascript" src="{{url_for('beet.beet_js')}}"></script>
 <script type="text/javascript">
 function connectBeet() {
  beet.get("{{app.config.get('BEET_APP_NAME')}}", "BTS").then(beet => {
@@ -19,7 +19,7 @@ function connectBeet() {
 <form class="ui form" id="beetLogin" method="POST">
   {{ loginForm.csrf_token }}
   <button class="ui basic button" value="Beet" onclick="connectBeet()" type="button">
-    <h2 class="ui header"><img class="image icon" src="{{url_for('.beet_logo')}}"/>
+    <h2 class="ui header"><img class="image icon" src="{{url_for('beet.beet_logo')}}"/>
       <div class="content">Login
         <div class="sub header">with Beet</div>
       </div>
