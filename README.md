@@ -26,6 +26,7 @@ from flask_beet import Beet
 app = Flask(__name__)
 beet = Beet(app)
 ```
+
 You'll also need to extend your user model with the `BeetMixin` mixin:
 
 ```python
