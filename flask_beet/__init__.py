@@ -11,16 +11,19 @@ from .forms import SignedMessageLoginForm
 #: Default configuration
 _default_config = {
     "APP_NAME": "Flask-Beet",
-    "LOGIN_ENDOINT": "/login/beet",
+    "REMEMBER": True,
+    "UNIQUE_MESSAGE_GENERATOR": unique_request_id,
+    # VIEW
     "POST_LOGIN_VIEW": "/",
     "ONBOARDING_VIEW": "/register",
+    # MESSAGES
     "INVALID_PAYLOAD_MESSAGE": "Invalid payload!",
-    "UNIQUE_MESSAGE_GENERATOR": unique_request_id,
+    # SESSION KEYS
     "UNIQUE_MESSAGE_SESSION_KEY": "_signed_message_payload",
     "ONBOARDING_ACCOUNT_NAME_KEY": "_onboarding_account_name",
     "ONBOARDING_MESSAGE_KEY": "_onboarding_message",
+    # TEMPLATES
     "LOGIN_TEMPLATE": "/beet/login.html",
-    "REMEMBER": True,
 }
 
 
@@ -63,7 +66,7 @@ class BeetMixin:
         which account
     """
 
-    beet_account_name = Column(String)
+    beet_account_name = Column(String(255))
 
     def set_beet_account_name(self, name):
         """ Set a beet account name
