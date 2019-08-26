@@ -10,5 +10,4 @@ Flask-Session
 SQLAlchemy
 WTForms
 Werkzeug
-uuid
 blinker

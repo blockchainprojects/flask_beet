@@ -24,6 +24,7 @@ _default_config = {
     "ONBOARDING_MESSAGE_KEY": "_onboarding_message",
     # TEMPLATES
     "LOGIN_TEMPLATE": "/beet/login.html",
+    "LAYOUT_TEMPLATE": "layout.html",
 }
 
 
