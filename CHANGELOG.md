@@ -1,6 +1,11 @@
 # Changelog
 Note: version releases in the 0.x.y range may introduce breaking changes.
 
+## 0.2.0
+
+- minor: Allow to replace the template layout of the form
+- patch: Remove uuid from requirements.txt
+
 ## 0.1.0
 
 - minor: Cleanup and ensure we can use this with MySql/MariaDB

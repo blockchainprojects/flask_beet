@@ -1,0 +1,10 @@
+[
+  {
+    "description": "Allow to replace the template layout of the form",
+    "type": "minor"
+  },
+  {
+    "description": "Remove uuid from requirements.txt",
+    "type": "patch"
+  }
+]
