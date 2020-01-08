@@ -6,7 +6,7 @@ from werkzeug.local import LocalProxy
 from .utils import unique_request_id
 from .views import bp
 from .forms import SignedMessageLoginForm
-
+from .utils import get_onboarding_account_name as get_onboarding_account_name
 
 #: Default configuration
 _default_config = {
