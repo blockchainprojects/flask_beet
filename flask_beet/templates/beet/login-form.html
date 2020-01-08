@@ -1,6 +1,7 @@
 <script type="text/javascript" src="{{url_for('beet.beet_js')}}"></script>
 <script type="text/javascript">
 function connectBeet() {
+ beet.allowLocalhostFallback();
  beet.get("{{config.get('BEET_APP_NAME')}}", "BTS").then(beet => {
   var payload = "{{signed_message_payload}}";
   beet.BTS.signMessage(payload).then(res => {
@@ -16,32 +17,29 @@ function connectBeet() {
 }
 </script>
 
-<form class="ui form" id="beetLogin" method="POST" action="{{url_for('beet.login')}}">
+<form id="beetLogin" method="POST" action="{{url_for('beet.login')}}">
   {{ beet_login_form.csrf_token }}
-  <button class="ui basic button" value="Beet" onclick="connectBeet()" type="button">
-    <h2 class="ui header"><img class="image icon" src="{{url_for('beet.beet_logo')}}"/>
-      <div class="content">Login
-        <div class="sub header">with Beet</div>
-      </div>
-    </h2>
+  <button value="Beet" onclick="connectBeet()" type="button">
+   	<img src="{{url_for('beet.beet_logo')}}" style="width: 200px;"/>
+  	<h3>Login<br />with Beet</h3>
   </button>
-  <div class="ui accordion">
-    <div class="title"><i class="dropdown icon"></i>I don't have Beet installed!</div>
-    <div class="{% if beet_login_form.message.errors %}active {% endif %}content">
-      <p>Please sign the following message</p>
-      <p class="text centered ui label">{{signed_message_payload}}</p>
-      <div class="field {% if beet_login_form.message.errors %} error {% endif %}">
-        <label>Signed Messaged</label>
-        <div class="ui input">
+  <div style="margin-top: 2rem;">
+    <div>If you don't have Beet installed you can sign the following message manually:
+      <p style="margin-left: 2rem;">{{signed_message_payload}}</p>
+      <div style="margin-bottom: 2rem;">
+        <label>Enter the signed message below:</label>
+        <div>
          {{ beet_login_form.message()|safe }}
         </div>
         {% if beet_login_form.message.errors %}
-        <div class="ui red message">
-         <div class="header">Error</div>
-         <div class="ui list">
-          {% for error in beet_login_form.message.errors %}
-          <div class="item">{{error}}</div>
-          {% endfor %}
+        <div>
+         <div>Error</div>
+         <div>
+	         <ul>
+	         	{% for error in beet_login_form.message.errors %}
+          			<li>{{error}}</li>
+	          	{% endfor %}
+	         </ul>
          </div>
         </div>
         {% endif %}
